@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+    <head>
+	<title>JS Test</title>
+	<!-- ie9+ rendering support for latest standards -->
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <meta http-equiv="X-UA-Compatible" content="IE-edge">
+
+	<!--   3rd-party stylesheet  -->
+	<link rel="stylesheet" href="css/main.css" type="text/css" />
+
+	<!--   stylesheet  -->
+
+	<!--   third-party javascript -->
+	<script src="js/jq/jquery-1.11.3.js"></script>
+	
+	<!-- our javascript -->
+	<script src="js/main.js"></script>       <!-- namespace -->
+	<script>
+	$(function () { main.initModule ($('#control'), $('#canvas')); });
+	</script>
+    </head>
+    <body>
+	<div id="control">
+            <b> JS test </b>
+            Query:
+            <input id="query" name="q" type="text" value>
+            <button id="search" aria-label="Search">
+                <span>Search</span>
+            </button>
+            <button id="expand" aria-label="Expand">
+                <span>Expand</span>
+            </button>
+        </div>
+	<div id="canvasdiv"><iframe id="canvas" sandbox="allow-forms allow-scripts">test</iframe></div>
+    </body>
+</html>

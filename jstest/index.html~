@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+    <head>
+	<title>JS Test</title>
+	<!-- ie9+ rendering support for latest standards -->
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <meta http-equiv="X-UA-Compatible" content="IE-edge">
+
+	<!--   3rd-party stylesheet  -->
+
+	<!--   stylesheet  -->
+
+	<!--   third-party javascript -->
+	
+	<!-- our javascript -->
+	<script src="js/spa.js"></script>       <!-- namespace -->
+	<script src="js/spa.util.js"></script>  <!-- utility -->
+	<script src="js/spa.model.js"></script> <!-- model  -->
+	<script src="js/spa.shell.js"></script> <!-- shell -->
+	<script src="js/spa.chat.js"></script>  <!-- features -->
+	<script>
+	$(function () { spa.initModule ($('#spa')); });
+	</script>
+    </head>
+    <body>
+	<div id="spa" ></div>
+    </body>
+</html>
