@@ -1,0 +1,73 @@
+# -*- Mode: makefile -*-
+# The GNU Make Book by John Graham-Cumming
+
+# print-%
+# printvars
+# trace macros (_trace, SHELL)
+# make --trace from GNU make 4.x
+# gmsl(should be installed) assert, assert_exist
+include gmsl
+
+ifdef TRACE
+#where-am-i = $(CURDIR)/$(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
+where-am-i = $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
+THIS_MAKEFILE := $(call where-am-i)
+.PHONY: _trace _value
+_trace: ; @$(MAKE) -f $(THIS_MAKEFILE) --no-print-directory TRACE= \
+	$(TRACE)='$$(warning TRACE $(TRACE))$(shell $(MAKE) -f $(THIS_MAKEFILE) TRACE=$(TRACE) _value)'
+_value: ; @echo '$(value $(TRACE))'
+endif
+
+print-%: ; @echo $* = '$($*)' from $(origin $*)
+
+X=$(YS) love $(ZS)
+Y=dog
+YS=$(Y)$(S)
+Z=cat
+ZS=$(Z)$(S)
+S=s
+
+.PHONY: printvars all all1
+OLD_SHELL := $(SHELL)
+#SHELL = $(warning Building $@)$(OLD_SHELL)
+#SHELL = $(warning Building $@$(if $<, (from $<))$(if $?, ($? newer)))$(OLD_SHELL) -x
+MYVAR1 = hello
+MYVAR2 = $(MYVAR1) everyone
+
+all: a b c
+a: b
+	@touch $@
+b:
+	@touch $@
+c: d
+	@touch $@
+d:
+	@touch $@
+
+
+all3: MYVAR3 = $(MYVAR2)
+all3: foo baz
+	@echo Finally making $@
+foo baz:
+	@echo Building $@
+
+all2: foo.o bar
+
+bar: ; @touch $@
+
+all1: $(YS) $(ZS)
+all1: ; @echo $(X)
+
+$(YS): ; @echo $(Y) $(Y)
+$(ZS): ; @echo $(Z) $(Z)
+
+printvars:
+	@$(foreach V,$(sort $(.VARIABLES)), \
+        $(if $(filter-out environ% default automatic, \
+	$(origin $V)),$(info $V=$($V) ($(value $V)))))
+
+
+FOO := foo
+BAR := fooo
+$(call assert,$(call sne,$(FOO),$(BAR)),FOO == BAR)
+$(call assert_exists,foo.c)

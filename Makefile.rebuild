@@ -1,0 +1,14 @@
+# -*- Mode: makefile -*-
+# The GNU Make Book by John Graham-Cumming
+
+include Makefile.signature
+
+all: foo.o bar.o
+
+foo.o: foo.c
+	$(call do,$$(COMPILE.C) -DDEBUG=$$(DEBUG) -o $$@ $$<)
+
+bar.o: bar.c
+	$(call do,$$(COMPILE.C) -o $$@ $$<)
+
+-include foo.o.sig bar.o.sig

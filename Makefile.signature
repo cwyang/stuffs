@@ -1,0 +1,21 @@
+# -*- Mode: makefile -*-
+# The GNU Make Book by John Graham-Cumming
+
+include gmsl
+
+last_target :=
+
+dump_var = \$$(eval $1 := $($1))
+
+define new_rule
+@echo "$(call map,dump_var,@ % < ? ^ + *)" > $S
+@$(if $(wildcard $F),,touch $F)
+@echo $@: $F >> $S
+endef
+
+define do
+$(eval S := $@.sig)$(eval F := $@.force)$(eval C := $1)
+$(if $(call sne,$@,$(last_target)),$(call new_rule),$(eval last_target := $@))
+@echo "$(subst $$,\$$,$$(if $$(call sne,$1,$C),$$(shell touch $F)))" >> $S
+$C
+endef
