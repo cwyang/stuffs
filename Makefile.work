@@ -1,0 +1,110 @@
+# -*- Mode: makefile -*-
+# The GNU Make Book by John Graham-Cumming
+
+# RULE 1: "command line beats makefile beats environment"
+# . "$(shell) gets parent environment"
+# . "whitespace in GNU make is very significant"
+# RULE 2: ":= is simple. = is recursive"
+# . "see MD5LIST technique to do heavy job once"
+
+Home=foo
+BUILD_DEBUG := yes
+
+ifndef FOOVAR1
+FOOVAR1 := yes
+endif
+
+export FOOVAR2 ?= yes  # same to above
+export FOOVAR3 = foo_var
+unexport FOOVAR1
+#override PATH=foo  #overide var of environment
+
+TEST1 =
+ifdef TEST1
+$(info TEST1 is defined)
+else
+$(info TEST1 is undefined)
+endif
+TEST2 = $(TEST1)
+ifdef TEST2
+$(info TEST2 is defined)
+else
+$(info TEST2 is undefined)
+endif
+TEST3_NAME=TEST3
+TEST3=h
+ifdef $(TEST3_NAME)
+$(info TEST3 is defined)
+else
+$(info TEST3 is undefined)
+endif
+
+TESTBAR = before
+TESTFOO := $(TESTBAR) the rain
+TESTBAR = after
+
+TESTBAR1 = before
+TESTFOO1 = $(TESTBAR1) the rain
+TESTBAR1 = after
+
+$(info $(TESTFOO) $(TESTFOO1))
+
+MD5LIST = $(eval MD5LIST := $(shell find . -name '*.py' | xargs md5sum))$(MD5LIST)
+$(info before use MD5LIST is: $(value MD5LIST))
+$(info MD5LIST is : $(MD5LIST))
+$(info after use MD5LIST is: $(value MD5LIST))
+
+lastword = $(if $1,$(word $(words $1),$1))
+tail = $(wordlist 2,$(words $1),$1)
+
+HAVE_CURL := $(shell which curl)
+ifndef HAVE_CURL
+$(error curl is missing)
+endif
+
+assert-command-present = $(if $(shell which $1),,$(error '$1' missing))
+$(call assert-command-present,curl)
+
+make-truth=$(if $1,T)
+or=$(call make-truth,$1$2) # $(if $1$2,T)
+and=$(if $1,$(if $2,T))
+not=$(if $1,,T)
+$(info "test start")
+$(info $(call make-truth, ))
+$(info $(call make-truth,))	# beware of space
+$(info "test end")
+
+$(info $(Shell Printenv |Grep Foovar3))
+$(info $(shell FOOVAR3=$(FOOVAR3) printenv |grep FOOVAR3))
+.PHONY: all foo bar baz
+all1: export FOOVAR2=just for all
+all1:
+	echo $(.FEATURES)
+	@printenv |grep FOOVAR3
+	@echo MAKELEVEL is $$MAKELEVEL
+	@echo FOOVAR1 is $$FOOVAR1
+	@echo FOOVAR2 is $$FOOVAR2
+	@echo BUILD_DEBUG is $(BUILD_DEBUG)
+	$(info $(HOME))
+	$(info $(HOME) $(origin HOME))
+	echo $(firstword $(origin HOME))
+
+VAR = global scope
+all: foo bar
+all: ; @echo In $@ VAR is $(VAR)
+
+foo: ; @echo In $@ VAR is $(VAR)
+
+bar: VAR = local scope
+bar: baz
+bar: ; @echo In $@ VAR is $(VAR)
+
+baz: ; @echo In $@ VAR is $(VAR)
+
+f%: VAR = starts with f
+
+check_example: export _dummy = $(call assert-command-present,curly)
+check_example: ; @echo download...
+# make -e to prevent environment var overriding
+
+# BUILD_DEBUG=no make != make BUILD_DEBUG=no, command line var overrides.
