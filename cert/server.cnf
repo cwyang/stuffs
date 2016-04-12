@@ -1,0 +1,3 @@
+basicConstraints = CA:FALSE
+subjectAltName=DNS:server.domain.com
+extendedKeyUsage=serverAuth
