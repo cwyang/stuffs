@@ -1,6 +1,6 @@
 KEYBIT=2048
-SERVERDOMAIN="server.domain.com"
-CADOMAIN="ca.domain.com"
+SERVERDOMAIN="ns.aratech.co.kr"
+CADOMAIN="ca.aratech.co.kr"
 SERVERCN="cwyang test server $(KEYBIT)"
 CACN="cwyang test CA $(KEYBIT)"
 GENRSA=./genrsa.sh

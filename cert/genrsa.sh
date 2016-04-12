@@ -26,7 +26,7 @@ else
     SCNAME="[EC]${SCN}"
 fi
 openssl req -new -key server_key.pem -days 1096 -extensions v3_ca -batch -out server.csr -utf8 -subj "/CN=${SCNAME}"
-openssl x509 -req -sha256 -days 1096 -in server.csr -CAkey ca_key.pem -CA ca_cert.pem -set_serial 2222 -out server_cert.pem \
+openssl x509 -req -sha256 -days 1096 -in server.csr -CAkey ca_key.pem -CA ca_cert.pem -set_serial ${RANDOM} -out server_cert.pem \
     -extfile <(cat server.cnf \
     <(printf "subjectAltName=DNS:${SDOMAIN}
 "))
