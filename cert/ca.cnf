@@ -1,2 +1,9 @@
+[ ca ]
+default_ca = my_test_ca
+
+[ my_test_ca ]
 basicConstraints = CA:TRUE
 extendedKeyUsage=serverAuth
+database=index.txt
+default_md=md5
+cerficate=test.crt
