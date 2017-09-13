@@ -1,0 +1,1 @@
+openssl s_client -showcerts -connect test-sspev.verisign.com:2443 </dev/null 2>/dev/null|openssl x509 -outform PEM >verisign_revoked.pem

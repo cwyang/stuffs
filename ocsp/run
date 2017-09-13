@@ -1,0 +1,1 @@
+/usr/bin/openssl ocsp -noverify -header Host ocsp.comodoca.com -url http://ocsp.comodoca.com -issuer pp.pem -CAfile issuer.pem -cert naver.pem -resp_text resp.der
