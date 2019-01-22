@@ -4,7 +4,7 @@ NOTEXT=-notext
 openssl req -new \
 	-newkey rsa:2048 \
 	-subj "/C=KR/O=cwyang/CN=cwyang's Test OCSP Root Responder" \
-	-keyout private/root-ocsp.key \
+	-keyout private/root-ocsp.key -nodes \
 	-out root-ocsp.csr
 RES=$?
 if [ "$RES" -ne 0 ]; then
