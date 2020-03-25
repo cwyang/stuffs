@@ -1,0 +1,18 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+	sharedrepository = 1
+[receive]
+	denyNonFastforwards = true
+
+[hooks "slack"]
+	channel = gitbot
+	webhook-url = /* deleted */
+	show-only-last-commit = false
+	repo-nice-name = **TEST(git)**
+	compare-url-pattern    = http://172.16.140.32/git/?p=test\\&a=commitdiff\\&h=%new_rev_hash%\\&hp=%old_rev_hash%\\&
+	changeset-url-pattern =  "http://172.16.140.32/git/?p=test;a=log;h=%new_rev_hash%;hp=%old_rev_hash%"
+	#changeset-url-pattern = http://172.16.140.32/git/?p=test&a=log&h=%old_rev_hash%
+	#compare-url-pattern = http://172.16.140.32/git/?p=test&a=commitdiff&h=%new_rev_hash%&hp=%old_rev_hash%
+	repos-root = /home/git/test
