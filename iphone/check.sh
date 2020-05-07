@@ -1,0 +1,1 @@
+curl -sk 'https://shop.tworld.co.kr/api/wireless/childProductList?productGrpId=000003292&subscriptionId=NA00005134&categoryId=20010001&_=1588813297867' | sed 's/mimage[^"]*/DEADBEEF/g; s/image360[^"]*/DEADBEEF/g;'| jq -c '.content | .[] | select(.entryNm=="기기변경") | del (.DEADBEEF)' | jq '.'
