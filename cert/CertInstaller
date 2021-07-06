@@ -1,0 +1,28 @@
+#!/bin/sh
+install_cert() {
+    cmd="security add-trusted-cert -d -k /Library/Keychains/System.keychain -r trustRoot $certLocation$CERTFILE"
+    subj=`openssl x509 -in $certLocation$CERTFILE -noout -text -inform DER| perl -ne 'print $1 if /Subject: (.*)/'`
+    prompt="Installing an SSL certificate <$subj>."
+    OUTPUT=$(osascript -e "do shell script \"${cmd}\" with administrator privileges with prompt \"${prompt}\"" 2>&1)
+    if [ $? -ne 0 ]; then
+	osascript -e "display dialog \"${OUTPUT}\" with title \"Installation Failed\" buttons{\"OK\"} default button \"OK\"" >& /dev/null
+	exit 0
+    else
+	osascript -e "display dialog \"The certificate has been installed to System Keychain.\" with title \"Installation completed\" buttons {\"OK\"} default button \"OK\"" >& /dev/null
+    fi
+}
+
+CERTURL="http://sslcert.cc/cgi/cert_down.php"
+CERTFILE=cert.pem
+CERTNAME="Local Root CA"
+
+certLocation="/tmp/pki/"
+mkdir -p $certLocation
+curl --silent $CERTURL | grep -v -- "---" | base64 -D > $certLocation/$CERTFILE
+if [ $? -ne 0 ]; then
+	osascript -e "display dialog \"Cannot download SSL certificate. Please contact network administrator.\" buttons {\"OK\"} default button \"OK\"" >& /dev/null
+    echo "Cannot download SSL certificate."
+    echo "Please contact network administrator"
+    exit 0
+fi
+install_cert
